@@ -18,20 +18,74 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 /**
+ * Importe le module 'url' qui
+ * nous permettra de lire l' url
+ * et ses données.
+ * @type {module:url}
+ */
+
+const url = require('url');
+
+/**
+ * Importe le module 'fr' qui
+ * nous permettra d'accéder au
+ * système de fichier.
+ */
+
+const fs = require('fs');
+
+
+/**
  * Création de notre serveur NodeJS
  * @type {Server}
  */
 const server = http.createServer( (req, res) => {
 
-    // -- On envoi un code statut HTTP.
-    res.statusCode = 200;
+    let path = url.parse( req.url ).pathname;
+    // console.log(_dirname);
+    console.log(path);
 
-    // -- On ajoute a notre réponse une en-tête HTTP de type texte.
-    res.setHeader('content-type', 'text/plain');
+    if (path === '/') {
 
-    // -- Fin de notre réponse, on retourne Hello World !
-    res.end('Hello Node World !');
-} );
+        // -- Je me demande à NodeJS de lire mon fichier HTML.
+        fs.readfile(__dirname + '/views/html/index.html',
+            callback function(err,data) => {
+            /**
+             * Le contenu de ma fonction ne sera executé que lorsque
+             * NodeJS aura fini la lecture de mon fichier.
+             * -----------------------------------------------------
+             * 'data' contient les données de ma page HTML.
+             */
+
+            // -- En cas d'erreur je l'affiche dans la console.
+            if (err) console.log(err);
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/html; charset=ut-8');
+            res.end(data);
+
+        }); // Fin de fs.readfile
+
+
+
+    } else if (path === '/contacts') {
+
+        let params = url.parse(req.url, true).query;
+        let prenom = params.prenom;
+        let nom = params.nom;
+
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html; charset=ut-8 ');
+        res.end(`<html><body><h1> Mes contacts</h1></body></html>`);
+
+    } else if (path === '/contact') {
+
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/html; charset=ut-8 ');
+        res.end(`<html><body><h1>Mon contacts !</h1></body></html>`);
+    }
+
+}); // Fin du http.createServer()
 
 /**
  * Démarrage du serveur et écoute
