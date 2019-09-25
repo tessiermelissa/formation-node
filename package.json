@@ -8,6 +8,6 @@
     "start": "node server-node.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Melissa Tessier",
   "license": "ISC"
 }
